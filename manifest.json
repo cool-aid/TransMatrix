@@ -1,0 +1,40 @@
+{
+    "manifest_version": 3,
+    "name": "TransMatrix",
+    "version": "1.0.0",
+    "description": "Translate selected text into multiple languages simultaneously",
+    "permissions": [
+      "storage",
+      "activeTab",
+      "scripting"
+    ],
+    "action": {
+      "default_popup": "popup/index.html",
+      "default_icon": {
+        "16": "assets/icon16.png",
+        "48": "assets/icon48.png",
+        "128": "assets/icon128.png"
+      }
+    },
+    "background": {
+      "service_worker": "background/background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": [
+          "utils/constants.js",
+          "content/translationService.js",
+          "content/ui/SelectionIcon.js",
+          "content/ui/FloatingWindow.js",
+          "content/content.js"
+        ],
+        "css": ["content/style.css"]
+      }
+    ],
+    "icons": {
+      "16": "assets/icon16.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  }
