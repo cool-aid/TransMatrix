@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "TransMatrix",
+    "name": "TransMatrix - Translate One Language to Many Simultaneously",
     "version": "1.0.0",
-    "description": "Translate selected text into multiple languages simultaneously",
+    "description": "Translate selected text into multiple languages simultaneously using Google's latest AI translation capabilities",
     "permissions": [
       "storage",
       "activeTab",
