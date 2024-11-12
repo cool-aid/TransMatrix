@@ -35,29 +35,36 @@
   border-radius: 8px;
   min-width: 300px;
   max-width: 400px;
+  max-height: 80vh; /* Limit height to 80% of viewport height */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 16px;
-}
-
-.transmatrix-close {
-  position: absolute;
-  right: 8px;
-  top: 8px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #666;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-.transmatrix-close:hover {
-  background: #f5f5f5;
+  cursor: move; /* Indicate window is draggable */
 }
 
 .transmatrix-content {
   margin-top: 8px;
+  max-height: calc(80vh - 60px); /* Account for padding and header */
+  overflow-y: auto;
+  cursor: default; /* Reset cursor for content area */
+}
+
+/* Add custom scrollbar styling */
+.transmatrix-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.transmatrix-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.transmatrix-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.transmatrix-content::-webkit-scrollbar-thumb:hover {
+  background: #666;
 }
 
 .translation-item {
