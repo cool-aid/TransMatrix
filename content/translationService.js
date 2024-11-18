@@ -22,6 +22,12 @@ export class TranslationService {
     });
   }
 
+  updateSettings(settings) {
+    this.settings = settings;
+    this.translators.clear(); // Clear cached translators when settings change
+    console.log("TransMatrix: Translation service settings updated", settings);
+  }
+
   async initializeDetector() {
     const canDetect = await window.translation.canDetect();
     if (canDetect === "no") return false;

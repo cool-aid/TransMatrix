@@ -1,5 +1,8 @@
+import { DEFAULT_SETTINGS } from "../utils/constants.js";
+
 let selectedText = "";
 let isWindowVisible = false;
+let currentSettings = null;
 
 // Verify components exist
 const verifyComponents = () => {
@@ -20,6 +23,16 @@ const verifyComponents = () => {
   return true;
 };
 
+// Update translation service settings
+const updateTranslationSettings = (settings) => {
+  if (!window.translationService) {
+    console.error("TransMatrix: Translation service not available");
+    return;
+  }
+  window.translationService.updateSettings(settings);
+  console.log("TransMatrix: Translation service settings updated", settings);
+};
+
 // Initialize event listeners
 export const initialize = async () => {
   console.log("TransMatrix: Setting up event listeners...");
@@ -31,6 +44,30 @@ export const initialize = async () => {
     );
     return;
   }
+
+  // Load initial settings
+  try {
+    const result = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+    currentSettings = result;
+    updateTranslationSettings(currentSettings);
+    console.log("TransMatrix: Initial settings loaded", currentSettings);
+  } catch (error) {
+    console.error("TransMatrix: Error loading initial settings:", error);
+  }
+
+  // Listen for settings changes
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "sync") {
+      if (changes.sourceLanguage) {
+        currentSettings.sourceLanguage = changes.sourceLanguage.newValue;
+      }
+      if (changes.targetLanguages) {
+        currentSettings.targetLanguages = changes.targetLanguages.newValue;
+      }
+      updateTranslationSettings(currentSettings);
+      console.log("TransMatrix: Settings updated", currentSettings);
+    }
+  });
 
   const handleMouseUp = async (event) => {
     try {
@@ -63,7 +100,7 @@ export const initialize = async () => {
         // Show window with loader first
         window.floatingWindow.show(event.clientX, event.clientY);
 
-        // Get translations
+        // Get translations using current settings
         const translations = await window.translationService.translateToAll(
           selectedText
         );
