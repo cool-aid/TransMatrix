@@ -1,144 +1,85 @@
-class TransMatrix {
-  constructor() {
-    this.selectedText = "";
-    this.settings = null;
-    this.setupEventListeners();
-    this.loadSettings();
+import { DEFAULT_SETTINGS } from "../utils/constants.js";
+
+let selectedText = "";
+
+// Verify components exist
+const verifyComponents = () => {
+  const components = {
+    translationService: window.translationService,
+    selectionIcon: window.selectionIcon,
+    floatingWindow: window.floatingWindow,
+  };
+
+  const missing = Object.entries(components)
+    .filter(([_, value]) => !value)
+    .map(([key]) => key);
+
+  if (missing.length > 0) {
+    console.error(`TransMatrix: Missing components: ${missing.join(", ")}`);
+    return false;
+  }
+  return true;
+};
+
+// Initialize event listeners
+export const initialize = async () => {
+  console.log("TransMatrix: Setting up event listeners...");
+
+  // Verify components before setting up listeners
+  if (!verifyComponents()) {
+    console.error(
+      "TransMatrix: Cannot initialize event listeners - missing components"
+    );
+    return;
   }
 
-  async loadSettings() {
-    this.settings = await chrome.storage.sync.get({
-      sourceLanguage: "auto",
-      targetLanguages: ["es", "fr", "de"],
-    });
-  }
-
-  setupEventListeners() {
-    document.addEventListener("mouseup", this.handleSelection.bind(this));
-    document.addEventListener("click", this.handleClick.bind(this));
-    chrome.storage.onChanged.addListener(this.handleSettingsChange.bind(this));
-  }
-
-  handleSettingsChange(changes) {
-    if (changes.sourceLanguage || changes.targetLanguages) {
-      this.loadSettings();
-    }
-  }
-
-  // Only showing the modified handleSelection method - rest remains the same
-  async handleSelection(event) {
-    // Wait a small moment to ensure selection is complete
-    setTimeout(() => {
+  const handleMouseUp = async (event) => {
+    try {
       const selection = window.getSelection();
-      const selectedText = selection.toString().trim();
+      const text = selection.toString().trim();
 
-      // Hide icon first
-      window.selectionIcon.hide();
-
-      if (selectedText && selectedText !== this.selectedText) {
-        this.selectedText = selectedText;
-
-        try {
-          // Get the selection range
-          const range = selection.getRangeAt(0);
-          const rect = range.getBoundingClientRect();
-
-          // Calculate position
-          const scrollX =
-            window.pageXOffset || document.documentElement.scrollLeft;
-          const scrollY =
-            window.pageYOffset || document.documentElement.scrollTop;
-
-          // Show icon at the end of selection
-          window.selectionIcon.show(rect.right + scrollX, rect.top + scrollY);
-
-          // Set click handler
-          window.selectionIcon.setClickHandler(async () => {
-            window.selectionIcon.hide();
-
-            // Show floating window
-            window.floatingWindow.show(
-              rect.right + scrollX,
-              rect.top + scrollY
-            );
-            window.floatingWindow.setContent({ Loading: "Translating..." });
-
-            // Start translation
-            await this.translateText(selectedText);
-          });
-        } catch (error) {
-          console.error("Error handling selection:", error);
-        }
+      if (text && text !== selectedText) {
+        selectedText = text;
+        console.log("TransMatrix: Showing selection icon");
+        window.selectionIcon.show(event.clientX, event.clientY);
+      } else if (!text) {
+        selectedText = "";
+        console.log("TransMatrix: Hiding UI elements");
+        window.selectionIcon.hide();
+        window.floatingWindow.hide();
       }
-    }, 10);
-  }
-
-  handleClick(event) {
-    // Hide icon and window if clicking outside
-    if (
-      !event.target.closest(".transmatrix-window") &&
-      !event.target.closest(".transmatrix-icon")
-    ) {
-      window.selectionIcon.hide();
-      window.floatingWindow.hide();
-      this.selectedText = "";
+    } catch (error) {
+      console.error("TransMatrix: Error in mouseup handler:", error);
     }
-  }
+  };
 
-  async translateText(text) {
-    const translations = {};
-    let sourceLang = this.settings.sourceLanguage;
+  const handleClick = async (event) => {
+    try {
+      if (event.target.closest(".transmatrix-icon")) {
+        event.preventDefault();
+        console.log("TransMatrix: Icon clicked, initiating translation");
+        window.selectionIcon.hide();
 
-    // Detect language if set to auto
-    if (sourceLang === "auto") {
-      sourceLang = await window.translationService.detectLanguage(text);
-      if (!sourceLang) {
-        window.floatingWindow.setContent({
-          Error: "Could not detect source language",
-        });
-        return;
+        // Show window with loader first
+        window.floatingWindow.show(event.clientX, event.clientY);
+
+        // Get translations
+        const translations = await window.translationService.translateToAll(
+          selectedText
+        );
+        console.log("TransMatrix: Translations received", translations);
+
+        // Update window with translations
+        window.floatingWindow.setTranslations(translations);
       }
-      translations["Detected language"] = sourceLang;
+    } catch (error) {
+      console.error("TransMatrix: Error in click handler:", error);
     }
+  };
 
-    // Translate to each target language
-    for (const targetLang of this.settings.targetLanguages) {
-      // Skip if target language is the same as source
-      if (targetLang === sourceLang) {
-        translations[this.getLanguageName(targetLang)] = text;
-        continue;
-      }
+  // Add event listeners
+  document.addEventListener("mouseup", handleMouseUp);
+  document.addEventListener("click", handleClick);
 
-      const translation = await window.translationService.translate(
-        text,
-        sourceLang,
-        targetLang
-      );
-
-      if (translation) {
-        translations[this.getLanguageName(targetLang)] = translation;
-      } else {
-        translations[this.getLanguageName(targetLang)] = "Translation failed";
-      }
-    }
-
-    window.floatingWindow.setContent(translations);
-  }
-
-  getLanguageName(langCode) {
-    const languages = {
-      en: "English",
-      es: "Spanish",
-      fr: "French",
-      de: "German",
-      it: "Italian",
-      ja: "Japanese",
-      ko: "Korean",
-      zh: "Chinese",
-    };
-    return languages[langCode] || langCode;
-  }
-}
-
-// Initialize TransMatrix
-new TransMatrix();
+  console.log("TransMatrix: Event listeners initialized successfully");
+};
