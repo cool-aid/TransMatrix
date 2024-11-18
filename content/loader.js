@@ -69,11 +69,11 @@ const initializeContentScript = async () => {
   try {
     console.log("TransMatrix: Loading content script...");
     const contentModule = await import(
-      chrome.runtime.getURL("content/content.js")
+      chrome.runtime.getURL("content/main.js")
     );
 
     if (!contentModule) {
-      throw new Error("Failed to load content.js module");
+      throw new Error("Failed to load main.js module");
     }
 
     console.log(

@@ -24,7 +24,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content/content-script-loader.js"],
+      "js": ["content/loader.js"],
       "css": ["content/style.css"],
       "run_at": "document_start",
       "type": "module"
@@ -35,7 +35,7 @@
       "resources": [
         "utils/constants.js",
         "content/translationService.js",
-        "content/content.js",
+        "content/main.js",
         "content/ui/SelectionIcon.js",
         "content/ui/FloatingWindow.js"
       ],
