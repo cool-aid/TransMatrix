@@ -11,7 +11,7 @@ class FloatingWindow {
 
     const closeButton = document.createElement("button");
     closeButton.className = "transmatrix-close";
-    closeButton.innerHTML = "×";
+    closeButton.innerHTML = "X";
     closeButton.onclick = () => this.hide();
 
     this.content = document.createElement("div");
