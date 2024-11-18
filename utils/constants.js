@@ -20,5 +20,5 @@ export const STORAGE_KEYS = {
 
 export const DEFAULT_SETTINGS = {
   [STORAGE_KEYS.SOURCE_LANGUAGE]: "auto",
-  [STORAGE_KEYS.TARGET_LANGUAGES]: ["es", "fr", "de"],
+  [STORAGE_KEYS.TARGET_LANGUAGES]: ["zh", "ja", "ko"],
 };
