@@ -1,6 +1,5 @@
-import { DEFAULT_SETTINGS } from "../utils/constants.js";
-
 let selectedText = "";
+let isWindowVisible = false;
 
 // Verify components exist
 const verifyComponents = () => {
@@ -44,9 +43,8 @@ export const initialize = async () => {
         window.selectionIcon.show(event.clientX, event.clientY);
       } else if (!text) {
         selectedText = "";
-        console.log("TransMatrix: Hiding UI elements");
+        console.log("TransMatrix: Hiding selection icon");
         window.selectionIcon.hide();
-        window.floatingWindow.hide();
       }
     } catch (error) {
       console.error("TransMatrix: Error in mouseup handler:", error);
@@ -55,10 +53,12 @@ export const initialize = async () => {
 
   const handleClick = async (event) => {
     try {
+      // Handle translation icon click
       if (event.target.closest(".transmatrix-icon")) {
         event.preventDefault();
         console.log("TransMatrix: Icon clicked, initiating translation");
         window.selectionIcon.hide();
+        isWindowVisible = true;
 
         // Show window with loader first
         window.floatingWindow.show(event.clientX, event.clientY);
@@ -71,6 +71,15 @@ export const initialize = async () => {
 
         // Update window with translations
         window.floatingWindow.setTranslations(translations);
+        return;
+      }
+
+      // Handle clicks outside the floating window
+      if (isWindowVisible && !event.target.closest(".transmatrix-window")) {
+        console.log("TransMatrix: Click outside window, hiding window");
+        window.floatingWindow.hide();
+        isWindowVisible = false;
+        return;
       }
     } catch (error) {
       console.error("TransMatrix: Error in click handler:", error);
