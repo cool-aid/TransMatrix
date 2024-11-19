@@ -4,7 +4,7 @@ A powerful translation extension leveraging Chrome's latest built-in AI capabili
 
 ## Features
 
-- Seamless integration with Chrome's latest built-in AI APIs, the Language Detection API and the Translation API.
+- Seamless integration with Chrome's latest built-in AI APIs, the Language Detection API and the Translator API.
 - Translates selected text into multiple languages simultaneously, up to 3 languages at a time for performance reasons at the moment.
 - Automatically detects the language of the selected text
 - Supports both online and offline translation
