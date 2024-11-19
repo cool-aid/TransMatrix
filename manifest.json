@@ -37,7 +37,8 @@
         "content/translationService.js",
         "content/main.js",
         "content/ui/SelectionIcon.js",
-        "content/ui/FloatingWindow.js"
+        "content/ui/FloatingWindow.js",
+        "assets/*.png"
       ],
       "matches": ["<all_urls>"]
     }

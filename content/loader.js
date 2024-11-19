@@ -5,6 +5,13 @@ const initializeComponents = async () => {
   try {
     console.log("TransMatrix: Starting component initialization...");
 
+    // Wait for document to be ready
+    if (document.readyState === "loading") {
+      await new Promise((resolve) =>
+        document.addEventListener("DOMContentLoaded", resolve)
+      );
+    }
+
     // Create a map of module paths and their corresponding global variable names
     const modules = [
       {
