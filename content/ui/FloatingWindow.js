@@ -1,6 +1,5 @@
 export class FloatingWindow {
   constructor() {
-    console.log("TransMatrix: FloatingWindow constructor called");
     this.element = null;
     this.content = null;
     this.isDragging = false;
@@ -12,7 +11,6 @@ export class FloatingWindow {
       return;
     }
 
-    console.log("TransMatrix: Creating floating window");
     this.element = document.createElement("div");
     this.element.className = "transmatrix-window";
     this.element.style.display = "none";
@@ -37,7 +35,6 @@ export class FloatingWindow {
     this.element.appendChild(header);
     this.element.appendChild(this.content);
     document.body.appendChild(this.element);
-    console.log("TransMatrix: Floating window created and added to DOM");
 
     this.setupDragging(header);
   }
@@ -94,7 +91,6 @@ export class FloatingWindow {
   }
 
   updatePosition(x, y) {
-    console.log("TransMatrix: Updating window position", { x, y });
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const windowWidth = this.element.offsetWidth;
@@ -106,7 +102,6 @@ export class FloatingWindow {
 
     this.element.style.left = `${finalX}px`;
     this.element.style.top = `${finalY}px`;
-    console.log("TransMatrix: Window position updated", { finalX, finalY });
   }
 
   showLoader() {
@@ -121,9 +116,7 @@ export class FloatingWindow {
   }
 
   show(x, y) {
-    console.log("TransMatrix: Show floating window called", { x, y });
     if (!this.element) {
-      console.log("TransMatrix: Creating window in show()");
       this.createWindow();
     }
 
@@ -149,22 +142,15 @@ export class FloatingWindow {
 
     this.element.style.left = `${finalX}px`;
     this.element.style.top = `${finalY}px`;
-
-    console.log("TransMatrix: Window should now be visible at", {
-      finalX,
-      finalY,
-    });
   }
 
   hide() {
-    console.log("TransMatrix: Hide floating window called");
     if (this.element) {
       this.element.style.display = "none";
     }
   }
 
   setTranslations(translations) {
-    console.log("TransMatrix: Setting translations", translations);
     if (!this.content) {
       console.warn("TransMatrix: Content element not found");
       return;
@@ -187,6 +173,5 @@ export class FloatingWindow {
 
       this.content.appendChild(translationDiv);
     }
-    console.log("TransMatrix: Translations rendered");
   }
 }

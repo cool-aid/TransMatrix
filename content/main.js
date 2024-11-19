@@ -30,13 +30,10 @@ const updateTranslationSettings = (settings) => {
     return;
   }
   window.translationService.updateSettings(settings);
-  console.log("TransMatrix: Translation service settings updated", settings);
 };
 
 // Initialize event listeners
 export const initialize = async () => {
-  console.log("TransMatrix: Setting up event listeners...");
-
   // Verify components before setting up listeners
   if (!verifyComponents()) {
     console.error(
@@ -50,7 +47,6 @@ export const initialize = async () => {
     const result = await chrome.storage.sync.get(DEFAULT_SETTINGS);
     currentSettings = result;
     updateTranslationSettings(currentSettings);
-    console.log("TransMatrix: Initial settings loaded", currentSettings);
   } catch (error) {
     console.error("TransMatrix: Error loading initial settings:", error);
   }
@@ -65,7 +61,6 @@ export const initialize = async () => {
         currentSettings.targetLanguages = changes.targetLanguages.newValue;
       }
       updateTranslationSettings(currentSettings);
-      console.log("TransMatrix: Settings updated", currentSettings);
     }
   });
 
@@ -76,11 +71,9 @@ export const initialize = async () => {
 
       if (text && text !== selectedText) {
         selectedText = text;
-        console.log("TransMatrix: Showing selection icon");
         window.selectionIcon.show(event.clientX, event.clientY);
       } else if (!text) {
         selectedText = "";
-        console.log("TransMatrix: Hiding selection icon");
         window.selectionIcon.hide();
       }
     } catch (error) {
@@ -93,7 +86,6 @@ export const initialize = async () => {
       // Handle translation icon click
       if (event.target.closest(".transmatrix-icon")) {
         event.preventDefault();
-        console.log("TransMatrix: Icon clicked, initiating translation");
         window.selectionIcon.hide();
         isWindowVisible = true;
 
@@ -104,7 +96,6 @@ export const initialize = async () => {
         const translations = await window.translationService.translateToAll(
           selectedText
         );
-        console.log("TransMatrix: Translations received", translations);
 
         // Update window with translations
         window.floatingWindow.setTranslations(translations);
@@ -113,7 +104,6 @@ export const initialize = async () => {
 
       // Handle clicks outside the floating window
       if (isWindowVisible && !event.target.closest(".transmatrix-window")) {
-        console.log("TransMatrix: Click outside window, hiding window");
         window.floatingWindow.hide();
         isWindowVisible = false;
         return;
@@ -126,6 +116,4 @@ export const initialize = async () => {
   // Add event listeners
   document.addEventListener("mouseup", handleMouseUp);
   document.addEventListener("click", handleClick);
-
-  console.log("TransMatrix: Event listeners initialized successfully");
 };

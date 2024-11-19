@@ -1,15 +1,12 @@
 export class SelectionIcon {
   constructor() {
-    console.log("TransMatrix: SelectionIcon constructor called");
     this.element = null;
     this.createIcon();
   }
 
   createIcon() {
-    console.log("TransMatrix: Creating selection icon");
     const existingIcon = document.querySelector(".transmatrix-icon");
     if (existingIcon) {
-      console.log("TransMatrix: Removing existing icon");
       existingIcon.remove();
     }
 
@@ -29,13 +26,10 @@ export class SelectionIcon {
     this.element.innerHTML = `<img src="${iconUrl}" width="24" height="24" alt="Translate">`;
 
     document.body.appendChild(this.element);
-    console.log("TransMatrix: Selection icon created and added to DOM");
   }
 
   show(x, y) {
-    console.log("TransMatrix: Show selection icon called", { x, y });
     if (!this.element) {
-      console.log("TransMatrix: Creating icon in show()");
       this.createIcon();
     }
 
@@ -63,15 +57,9 @@ export class SelectionIcon {
     this.element.style.left = `${finalX + scrollX}px`;
     this.element.style.top = `${finalY + scrollY}px`;
     this.element.style.display = "flex"; // Use flex for better SVG centering
-    console.log("TransMatrix: Icon positioned and should be visible", {
-      left: this.element.style.left,
-      top: this.element.style.top,
-      display: this.element.style.display,
-    });
   }
 
   hide() {
-    console.log("TransMatrix: Hide selection icon called");
     if (this.element) {
       this.element.style.display = "none";
     }

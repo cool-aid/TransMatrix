@@ -25,7 +25,6 @@ export class TranslationService {
   updateSettings(settings) {
     this.settings = settings;
     this.translators.clear(); // Clear cached translators when settings change
-    console.log("TransMatrix: Translation service settings updated", settings);
   }
 
   async initializeDetector() {
