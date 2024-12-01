@@ -28,13 +28,17 @@ export class TranslationService {
   }
 
   async initializeDetector() {
-    const canDetect = await window.translation.canDetect();
-    if (canDetect === "no") return false;
+    const languageDetectorCapabilities = await self.ai.languageDetector.capabilities();
 
-    this.detector = await window.translation.createDetector();
-    if (canDetect !== "readily") {
-      await this.detector.ready;
+    if(languageDetectorCapabilities.available === "no") {
+      return false;
     }
+
+    if (languageDetectorCapabilities.available === "after-download") {
+      console.log("Language detection is available, but something will have to be downloaded. Hold tight!");
+    }
+
+    this.detector = await self.ai.languageDetector.create();
     return true;
   }
 
@@ -43,8 +47,8 @@ export class TranslationService {
       return null;
     }
 
-    const [result] = await this.detector.detect(text);
-    return result?.detectedLanguage ?? null;
+    const [bestResult] = await this.detector.detect(text);
+    return bestResult?.detectedLanguage ?? null;
   }
 
   async initializeTranslator(sourceLang, targetLang) {
@@ -82,9 +86,7 @@ export class TranslationService {
 
   async translateToAll(text) {
     // Detect source language if not specified
-    const sourceLang =
-      (await this.detectLanguage(text)) ||
-      this.settings[STORAGE_KEYS.SOURCE_LANGUAGE];
+    const sourceLang = await this.detectLanguage(text) || null;
     const translations = {};
 
     if (!sourceLang) {
