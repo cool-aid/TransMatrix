@@ -59,17 +59,16 @@ export class TranslationService {
       sourceLanguage: sourceLang,
       targetLanguage: targetLang,
     };
+    
     const canTranslate = await window.translation.canTranslate(languagePair);
 
-    if (canTranslate === "no") return false;
-
-    const translator = await window.translation.createTranslator(languagePair);
-    if (canTranslate !== "readily") {
-      await translator.ready;
+    if (canTranslate === "readily") {
+      const translator = await window.translation.createTranslator(languagePair);
+      this.translators.set(key, translator);
+      return true;
     }
 
-    this.translators.set(key, translator);
-    return true;
+    return false;
   }
 
   async translate(text, sourceLang, targetLang) {
