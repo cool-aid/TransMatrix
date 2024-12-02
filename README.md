@@ -12,7 +12,33 @@ A powerful translation extension leveraging Chrome's latest built-in AI capabili
 
 ## Requirements
 
-- Chrome version 131.0.6778.2 or above.
+### Prerequisites:
+- Make sure that you are using Chrome on one of these platforms: Windows, Mac, or Linux.
+- Download Chrome Canary or Chrome dev channel, and confirm that your version is equal to or newer than 131.0.6778.2.
+- Navigate to chrome://flags/#language-detection-api
+- Select Enabled.
+- Navigate to chrome://flags/#translation-api
+- Select Enabled without language pack limit
+- Relaunch Chrome.
+
+### Installation
+- Download the extension as a .zip file from GitHub
+- Unzip the file
+- Navigate to chrome://extensions/
+- Enable "Developer mode"
+- Click "Load unpacked"
+- Select the folder containing the extension files
+
+### Usage
+- Click on the extension icon in the toolbar
+- Select the source language or leave it as "Auto Detect"
+- Select the target languages, up to 3 languages due to performance reasons
+- Select the text you want to translate
+- Click on the icon showing up next to the selected text
+- The translation window will open
+- You can drag the window around
+- Click on the X button or click on the page outside the window to close it
+
 
 ## License
 
