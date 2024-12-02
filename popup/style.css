@@ -93,6 +93,16 @@
     align-items: center;
     gap: 4px;
   }
+
+  .selected-language.single {
+    background-color: transparent;
+    padding: 4px 0;
+    margin-top: 8px;
+  }
+  
+  .selected-language.single:empty {
+    display: none;
+  }
   
   .remove-language {
     cursor: pointer;
