@@ -26,7 +26,11 @@
 
       <div class="setting-group">
         <label>Target Languages (up to 3):</label>
-        <div id="targetLanguages"></div>
+        <div class="search-container">
+          <input type="text" id="languageSearch" class="search-input" placeholder="Search languages...">
+          <div id="languageDropdown" class="dropdown-content"></div>
+        </div>
+        <div id="selectedLanguages" class="selected-languages"></div>
       </div>
 
       <button id="saveButton" class="button">Save Settings</button>
