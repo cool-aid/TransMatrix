@@ -10,21 +10,29 @@
       <h2>TransMatrix Settings</h2>
 
       <div class="setting-group">
-        <label for="sourceLanguageSearch">Source Language:</label>
-        <div class="search-container">
-          <input type="text" id="sourceLanguageSearch" class="search-input" placeholder="Search source language...">
-          <div id="sourceLanguageDropdown" class="dropdown-content"></div>
+        <div class="language-section">
+          <div class="language-header">
+            <label for="sourceLanguageSearch">Source Language:</label>
+            <div id="selectedSourceLanguage" class="selected-language single"></div>
+          </div>
+          <div class="search-container">
+            <input type="text" id="sourceLanguageSearch" class="search-input" placeholder="Search language...">
+            <div id="sourceLanguageDropdown" class="dropdown-content"></div>
+          </div>
         </div>
-        <div id="selectedSourceLanguage" class="selected-language single"></div>
       </div>
 
       <div class="setting-group">
-        <label>Target Languages (up to 3):</label>
-        <div class="search-container">
-          <input type="text" id="languageSearch" class="search-input" placeholder="Search languages...">
-          <div id="languageDropdown" class="dropdown-content"></div>
+        <div class="language-section">
+          <div class="language-header">
+            <label>Target Languages (up to 3):</label>
+          </div>
+          <div class="search-container">
+            <input type="text" id="languageSearch" class="search-input" placeholder="Search language...">
+            <div id="languageDropdown" class="dropdown-content"></div>
+          </div>
+          <div id="selectedLanguages" class="selected-languages"></div>
         </div>
-        <div id="selectedLanguages" class="selected-languages"></div>
       </div>
 
       <button id="saveButton" class="button">Save Settings</button>

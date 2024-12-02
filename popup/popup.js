@@ -144,6 +144,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   saveButton.addEventListener("click", async () => {
+    if (selectedLanguages.size === 0) {
+      alert("Please select at least one target language");
+      return;
+    }
+
     const settings = {
       [STORAGE_KEYS.SOURCE_LANGUAGE]: currentSourceLanguage,
       [STORAGE_KEYS.TARGET_LANGUAGES]: Array.from(selectedLanguages),
